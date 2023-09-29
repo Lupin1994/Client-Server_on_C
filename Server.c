@@ -19,7 +19,39 @@ InputRequest* reckon_request_create(){
     reqest->accept = NULL;
 }
 
-InputRequest* parseInputRequest(InputRequest *input_request, char *request){
+InputRequest* parseInputRequest(char *request){
+    InputRequest *Our_reqest = reckon_request_create();
+    Our_reqest->request = request;
+    printf(Our_reqest->request);
+    char sep = "\n";
+    char *string_message = strtok(Our_reqest->request, sep);
+
+    while (string_message != NULL)
+    {
+        printf("%s\n", string_message);
+        string_message = strtok(NULL,sep);
+        
+        if (Our_reqest->get == NULL)
+        {
+            Our_reqest->get = string_message;
+        }
+        else if (Our_reqest->host == NULL)
+        {
+            Our_reqest->host = string_message;
+        }
+        else if (Our_reqest->user_agent == NULL)
+        {
+            Our_reqest->user_agent = string_message;
+        }
+        else
+        {
+            Our_reqest->accept = string_message;
+        }
+
+    }
+    
+
+
 
 }
 
@@ -66,6 +98,8 @@ int main()
     {
         printf("The client sent the data:%s\n", request);
     }
+    // printf("%c",&request);
+    // parseInputRequest(request);
 
 
     // send the message
