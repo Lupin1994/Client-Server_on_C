@@ -24,10 +24,10 @@ InputRequest* parseInputRequest(char *request){
     
     InputRequest *Our_reqest = reckon_request_create();
     Our_reqest->request = request;
-    //printf(Our_reqest->request);
+    
     char *sep = "\n";
     char *string_message = strtok(Our_reqest->request, sep);
-
+    Our_reqest->get = string_message;
     while (string_message != NULL)
     {
         printf("%s\n", string_message);
@@ -50,7 +50,10 @@ InputRequest* parseInputRequest(char *request){
             Our_reqest->accept = string_message;
         }
     }
-    //return Our_reqest;
+    printf("%s\n", Our_reqest->get);
+    printf("%s\n", Our_reqest->host);
+    printf("%s\n", Our_reqest->user_agent);
+    printf("%s\n", Our_reqest->accept);
 }
 
 int main()
