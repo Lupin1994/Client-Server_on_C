@@ -11,7 +11,7 @@
 
 
 InputRequest* reckon_request_create(){
-    InputRequest *reqest = (InputRequest*)malloc(syzeof(InputRequest));
+    InputRequest *reqest = (InputRequest*)malloc(sizeof(InputRequest));
     reqest->request = NULL;
     reqest->get = NULL;
     reqest->host = NULL;
@@ -25,7 +25,7 @@ InputRequest* parseInputRequest(char *request){
     InputRequest *Our_reqest = reckon_request_create();
     Our_reqest->request = request;
     printf(Our_reqest->request);
-    char sep = "\n";
+    char *sep = "\n";
     char *string_message = strtok(Our_reqest->request, sep);
 
     while (string_message != NULL)
