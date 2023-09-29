@@ -21,10 +21,10 @@ InputRequest* reckon_request_create(){
 
 InputRequest* parseInputRequest(char *request){
 
-    printf("1");
+    
     InputRequest *Our_reqest = reckon_request_create();
     Our_reqest->request = request;
-    printf(Our_reqest->request);
+    //printf(Our_reqest->request);
     char *sep = "\n";
     char *string_message = strtok(Our_reqest->request, sep);
 
