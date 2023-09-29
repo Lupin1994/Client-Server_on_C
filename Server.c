@@ -20,6 +20,8 @@ InputRequest* reckon_request_create(){
 }
 
 InputRequest* parseInputRequest(char *request){
+
+    printf("1");
     InputRequest *Our_reqest = reckon_request_create();
     Our_reqest->request = request;
     printf(Our_reqest->request);
@@ -30,7 +32,7 @@ InputRequest* parseInputRequest(char *request){
     {
         printf("%s\n", string_message);
         string_message = strtok(NULL,sep);
-        
+
         if (Our_reqest->get == NULL)
         {
             Our_reqest->get = string_message;
@@ -47,12 +49,8 @@ InputRequest* parseInputRequest(char *request){
         {
             Our_reqest->accept = string_message;
         }
-
     }
-    
-
-
-
+    //return Our_reqest;
 }
 
 int main()
@@ -98,8 +96,10 @@ int main()
     {
         printf("The client sent the data:%s\n", request);
     }
-    // printf("%c",&request);
-    // parseInputRequest(request);
+
+    //printf("2");
+    printf("%s",request);
+    parseInputRequest(request);
 
 
     // send the message
