@@ -7,7 +7,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <reckon_request.h>
+#include "reckon_request.h"
 
 
 InputRequest* reckon_request_create(){
@@ -97,8 +97,6 @@ int main()
         printf("The client sent the data:%s\n", request);
     }
 
-    //printf("2");
-    printf("%s",request);
     parseInputRequest(request);
 
 
