@@ -13,10 +13,10 @@
 InputRequest* reckon_request_create(){
     InputRequest *reqest = (InputRequest*)malloc(sizeof(InputRequest));
     reqest->request = NULL;
-    reqest->get = NULL;
-    reqest->host = NULL;
-    reqest->user_agent = NULL;
-    reqest->accept = NULL;
+    reqest->method_data_request = NULL;
+    reqest->Ip_and_port_client = NULL;
+    reqest->who_makes_request = NULL;
+    reqest->accepted_file_type = NULL;
 }
 
 InputRequest* parseInputRequest(char *request){
@@ -27,33 +27,34 @@ InputRequest* parseInputRequest(char *request){
     
     char *sep = "\n";
     char *string_message = strtok(Our_reqest->request, sep);
-    Our_reqest->get = string_message;
+    Our_reqest->method_data_request = string_message;
     while (string_message != NULL)
     {
         printf("%s\n", string_message);
         string_message = strtok(NULL,sep);
 
-        if (Our_reqest->get == NULL)
+        if (Our_reqest->method_data_request == NULL)
         {
-            Our_reqest->get = string_message;
+            Our_reqest->method_data_request = string_message;
         }
-        else if (Our_reqest->host == NULL)
+        else if (Our_reqest->Ip_and_port_client == NULL)
         {
-            Our_reqest->host = string_message;
+            Our_reqest->Ip_and_port_client = string_message;
         }
-        else if (Our_reqest->user_agent == NULL)
+        else if (Our_reqest->who_makes_request == NULL)
         {
-            Our_reqest->user_agent = string_message;
+            Our_reqest->who_makes_request = string_message;
         }
         else
         {
-            Our_reqest->accept = string_message;
+            Our_reqest->accepted_file_type = string_message;
         }
     }
-    printf("%s\n", Our_reqest->get);
-    printf("%s\n", Our_reqest->host);
-    printf("%s\n", Our_reqest->user_agent);
-    printf("%s\n", Our_reqest->accept);
+
+    printf("%s\n", Our_reqest->method_data_request);
+    printf("%s\n", Our_reqest->Ip_and_port_client);
+    printf("%s\n", Our_reqest->who_makes_request);
+    printf("%s\n", Our_reqest->accepted_file_type);
 }
 
 int main()
@@ -83,7 +84,7 @@ int main()
 
     if( client_socket <= 0)
 	{
-		puts("accept failed");
+		puts("accepted_file_type failed");
         return 1;
 	}
     
