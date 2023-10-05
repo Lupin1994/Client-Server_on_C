@@ -7,54 +7,42 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include "reckon_request.h"
+#include "http_request.h"
 
+// char* split_on_C(char *str){
+    
+// }
 
-InputRequest* reckon_request_create(){
-    InputRequest *reqest = (InputRequest*)malloc(sizeof(InputRequest));
-    reqest->request = NULL;
-    reqest->method_data_request = NULL;
-    reqest->Ip_and_port_client = NULL;
-    reqest->who_makes_request = NULL;
-    reqest->accepted_file_type = NULL;
+HttpRequest* http_request_create(){
+    HttpRequest *request = (HttpRequest*)malloc(sizeof(HttpRequest));
+
+    request->method = NULL;
+    request->path = NULL;
+    request->protocol = NULL;
+    request->version_protocol = NULL;
+    request->headers = NULL;
+    request->body = NULL;
+
+    return request;
 }
 
-InputRequest* parseInputRequest(char *request){
+HttpRequest* parseHttpRequest(char *request){
 
-    
-    InputRequest *Our_reqest = reckon_request_create();
-    Our_reqest->request = request;
-    
+    HttpRequest *http_request = http_request_create();
+
+    char *our_request = request;
+    //printf("%s", our_request);
     char *sep = "\n";
-    char *string_message = strtok(Our_reqest->request, sep);
-    Our_reqest->method_data_request = string_message;
-    while (string_message != NULL)
-    {
-        printf("%s\n", string_message);
-        string_message = strtok(NULL,sep);
+    char *string_message = strtok(our_request, sep);
+    printf("%s", string_message);
+    http_request->method = string_message;
 
-        if (Our_reqest->method_data_request == NULL)
-        {
-            Our_reqest->method_data_request = string_message;
-        }
-        else if (Our_reqest->Ip_and_port_client == NULL)
-        {
-            Our_reqest->Ip_and_port_client = string_message;
-        }
-        else if (Our_reqest->who_makes_request == NULL)
-        {
-            Our_reqest->who_makes_request = string_message;
-        }
-        else
-        {
-            Our_reqest->accepted_file_type = string_message;
-        }
-    }
+    //printf("%s", http_request->method);
 
-    printf("%s\n", Our_reqest->method_data_request);
-    printf("%s\n", Our_reqest->Ip_and_port_client);
-    printf("%s\n", Our_reqest->who_makes_request);
-    printf("%s\n", Our_reqest->accepted_file_type);
+    // 1) Сплит по /n
+    // 2) ОБработка превой строки (разделить по пробелам)
+    // 3) Сплит по : 
+
 }
 
 int main()
@@ -101,7 +89,7 @@ int main()
         printf("The client sent the data:%s\n", request);
     }
 
-    parseInputRequest(request);
+    parseHttpRequest(request);
 
 
     // send the message
