@@ -9,11 +9,51 @@
 #include <netinet/in.h>
 #include "http_request.h"
 
-// char* split_on_C(char *str){
+void printString(char *str){
+    int countElements = strlen(str);
+    for (int i = 0; i <= countElements; i++)
+    {
+        printf("%c", str[i]);
+    }
     
-// }
+}
+
+char* split_on_C(char *str){
+
+    //printf("%s", str);
+    char string[strlen(str)];
+
+    int len_input_str = strlen(str);
+    //printf("%d", len_input_str);
+
+    for (int i = 0; len_input_str > 0; i++)
+    {
+        string[i] = str[i];
+        len_input_str--;
+    }
+
+    //printf("%s", string);
+    char *element = " ";
+    int pointer;
+    char separator_sring[15];
+    
+    HttpRequest *http_request = http_request_create();
+
+    for (int i = 0; string[i] == element; i++)
+    {
+        separator_sring[i] = string[i];
+        pointer = i;
+    }
+
+    http_request->method = separator_sring;
+    printf("%d", pointer);
+    printf("%s", separator_sring);
+    printf("%s", http_request->method);
+
+}
 
 HttpRequest* http_request_create(){
+
     HttpRequest *request = (HttpRequest*)malloc(sizeof(HttpRequest));
 
     request->method = NULL;
@@ -89,8 +129,9 @@ int main()
         printf("The client sent the data:%s\n", request);
     }
 
-    parseHttpRequest(request);
+    //parseHttpRequest(request);
 
+    split_on_C(request);
 
     // send the message
     send(client_socket, server_message, sizeof(server_message), 0);    
