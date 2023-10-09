@@ -18,6 +18,20 @@ void printString(char *str){
     
 }
 
+HttpRequest* http_request_create(){
+
+    HttpRequest *request = (HttpRequest*)malloc(sizeof(HttpRequest));
+
+    request->method = NULL;
+    request->path = NULL;
+    request->protocol = NULL;
+    request->version_protocol = NULL;
+    request->headers = NULL;
+    request->body = NULL;
+
+    return request;
+}
+
 char* split_on_C(char *str){
 
     //printf("%s", str);
@@ -32,46 +46,48 @@ char* split_on_C(char *str){
         len_input_str--;
     }
 
-    //printf("%s", string);
+    printf("%s", string);
+
     char *element = " ";
     int pointer;
     char separator_sring[15];
-
+    char search_element;
+    //printf("%d", 1);
     HttpRequest *http_request = http_request_create();
-
-    for (int i = 0; string[i] == element; i++)
+    //printf("%d", 2);
+    for (int i = 0; search_element == element; i++)
     {
         separator_sring[i] = string[i];
+        search_element = string[i];
         pointer = i;
     }
-
+    //printf("%d", 3);
     http_request->method = separator_sring;
+    
     printf("%d", pointer);
     printf("%s", separator_sring);
     printf("%s", http_request->method);
-    separator_sring = NULL;
-    for (int i = pointer+1; string[i] == element; i++)
-    {
-        separator_sring[i] = string[i];
-        pointer = i;
-    }
-    
-
+    //separator_sring = NULL;
+    // for (int i = pointer+1; string[i] == element; i++)
+    // {
+    //     separator_sring[i] = string[i];
+    //     pointer = i;
+    // }
 }
 
-HttpRequest* http_request_create(){
+// HttpRequest* http_request_create(){
 
-    HttpRequest *request = (HttpRequest*)malloc(sizeof(HttpRequest));
+//     HttpRequest *request = (HttpRequest*)malloc(sizeof(HttpRequest));
 
-    request->method = NULL;
-    request->path = NULL;
-    request->protocol = NULL;
-    request->version_protocol = NULL;
-    request->headers = NULL;
-    request->body = NULL;
+//     request->method = NULL;
+//     request->path = NULL;
+//     request->protocol = NULL;
+//     request->version_protocol = NULL;
+//     request->headers = NULL;
+//     request->body = NULL;
 
-    return request;
-}
+//     return request;
+// }
 
 // HttpRequest* parseHttpRequest(char *request){
 
