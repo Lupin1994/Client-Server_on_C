@@ -36,7 +36,7 @@ char* split_on_C(char *str){
     char *element = " ";
     int pointer;
     char separator_sring[15];
-    
+
     HttpRequest *http_request = http_request_create();
 
     for (int i = 0; string[i] == element; i++)
@@ -49,6 +49,13 @@ char* split_on_C(char *str){
     printf("%d", pointer);
     printf("%s", separator_sring);
     printf("%s", http_request->method);
+    separator_sring = NULL;
+    for (int i = pointer+1; string[i] == element; i++)
+    {
+        separator_sring[i] = string[i];
+        pointer = i;
+    }
+    
 
 }
 
@@ -66,24 +73,24 @@ HttpRequest* http_request_create(){
     return request;
 }
 
-HttpRequest* parseHttpRequest(char *request){
+// HttpRequest* parseHttpRequest(char *request){
 
-    HttpRequest *http_request = http_request_create();
+//     HttpRequest *http_request = http_request_create();
 
-    char *our_request = request;
-    //printf("%s", our_request);
-    char *sep = "\n";
-    char *string_message = strtok(our_request, sep);
-    printf("%s", string_message);
-    http_request->method = string_message;
+//     char *our_request = request;
+//     //printf("%s", our_request);
+//     char *sep = "\n";
+//     char *string_message = strtok(our_request, sep);
+//     printf("%s", string_message);
+//     http_request->method = string_message;
 
-    //printf("%s", http_request->method);
+//     //printf("%s", http_request->method);
 
-    // 1) Сплит по /n
-    // 2) ОБработка превой строки (разделить по пробелам)
-    // 3) Сплит по : 
+//     // 1) Сплит по /n
+//     // 2) ОБработка превой строки (разделить по пробелам)
+//     // 3) Сплит по : 
 
-}
+// }
 
 int main()
 {
