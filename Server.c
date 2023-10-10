@@ -62,11 +62,9 @@ HttpRequest http_request_parse(char* rawHttpRequest){
 
     while (doubleString == NULL)
     {
-        printf("%s", doubleString);
         str = string_split(doubleString, " ");
         printf("%s", str);
-        doubleString = strstr(str, doubleString);
-        printf("%s", doubleString);
+
         if (http_request->method == NULL)
         {
             http_request->method = str;
