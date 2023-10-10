@@ -32,81 +32,76 @@ HttpRequest* http_request_create(){
     return request;
 }
 
-char* split_on_C(char *str){
-
-    //printf("%s", str);
-    char string[strlen(str)];
-
-    int len_input_str = strlen(str);
-    //printf("%d", len_input_str);
-
-    for (int i = 0; len_input_str > 0; i++)
-    {
-        string[i] = str[i];
-        len_input_str--;
-    }
-
-    printf("%s", string);
-
-    char *element = " ";
-    int pointer;
-    char separator_sring[15];
-    char search_element;
-    //printf("%d", 1);
-    HttpRequest *http_request = http_request_create();
-    //printf("%d", 2);
-    for (int i = 0; search_element == element; i++)
-    {
-        separator_sring[i] = string[i];
-        search_element = string[i];
-        pointer = i;
-    }
-    //printf("%d", 3);
-    http_request->method = separator_sring;
-    
-    printf("%d", pointer);
-    printf("%s", separator_sring);
-    printf("%s", http_request->method);
-    //separator_sring = NULL;
-    // for (int i = pointer+1; string[i] == element; i++)
-    // {
-    //     separator_sring[i] = string[i];
-    //     pointer = i;
-    // }
+char* string_split(char *inputString, char *separator){
+    //HttpRequest *requestAfterSplit = http_request_create();
+    // char *stringForSplit = inputString;
+    char *searchString = strtok(inputString, separator);
+    //printf("%s\n", searchString);
+    return searchString;
 }
 
-// HttpRequest* http_request_create(){
+HttpRequest http_request_parse(char* rawHttpRequest){
 
-//     HttpRequest *request = (HttpRequest*)malloc(sizeof(HttpRequest));
+    HttpRequest *http_request = http_request_create();
 
-//     request->method = NULL;
-//     request->path = NULL;
-//     request->protocol = NULL;
-//     request->version_protocol = NULL;
-//     request->headers = NULL;
-//     request->body = NULL;
+    char *our_request = rawHttpRequest;
+    // 1) Сплит по /n
+    // 2) ОБработка превой строки (разделить по пробелам)
+    // 3) Сплит по : 
 
-//     return request;
-// }
+    //printf("%s", our_request);
+    char *sep = "\n";
+    char *string_message = strtok(our_request, sep);
+    //printf("%s", string_message); 
+    char *doubleString;
+    char *str;
+    doubleString = string_message;
 
-// HttpRequest* parseHttpRequest(char *request){
+    printf("%s\n", doubleString);
+    //char *str = string_split(http_request->method, " ");
 
-//     HttpRequest *http_request = http_request_create();
+    while (doubleString == NULL)
+    {
+        printf("%s", doubleString);
+        str = string_split(doubleString, " ");
+        printf("%s", str);
+        doubleString = strstr(str, doubleString);
+        printf("%s", doubleString);
+        if (http_request->method == NULL)
+        {
+            http_request->method = str;
+        }
+        else if (http_request->path == NULL)
+        {
+            http_request->path = str;
+        }
+        else if (http_request->protocol == NULL)
+        {
+            http_request->protocol = str;
+        }
+        else
+        {
+            http_request->version_protocol = str;
+        }
 
-//     char *our_request = request;
-//     //printf("%s", our_request);
-//     char *sep = "\n";
-//     char *string_message = strtok(our_request, sep);
-//     printf("%s", string_message);
-//     http_request->method = string_message;
+    }
+    printf("%s", http_request->method);
+    printf("%s", http_request->path);
+    printf("%s", http_request->protocol);
+    printf("%s", http_request->version_protocol);
+    
+    //http_request->method = string_split(http_request->method, " ");
 
-//     //printf("%s", http_request->method);
-
-//     // 1) Сплит по /n
-//     // 2) ОБработка превой строки (разделить по пробелам)
-//     // 3) Сплит по : 
-
-// }
+    //printf("%s\n", http_request->method);
+    // while (string_message != NULL)
+    // {
+    //     // printf("%s\n", string_message);
+    //     string_message = strtok(our_request,sep);
+    //     str = string_message;
+    //     printf("%s", string_message);
+    // }
+    //printf("%s", http_request->method);
+}    
 
 int main()
 {
@@ -152,9 +147,9 @@ int main()
         printf("The client sent the data:%s\n", request);
     }
 
-    //parseHttpRequest(request);
+    http_request_parse(request);
 
-    split_on_C(request);
+    //split_on_C(request);
 
     // send the message
     send(client_socket, server_message, sizeof(server_message), 0);    
