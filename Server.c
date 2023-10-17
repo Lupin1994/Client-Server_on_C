@@ -32,12 +32,31 @@ HttpRequest* http_request_create(){
     return request;
 }
 
-char* string_split(char *inputString, char *separator){
-    //HttpRequest *requestAfterSplit = http_request_create();
-    // char *stringForSplit = inputString;
-    char *searchString = strtok(inputString, separator);
-    //printf("%s\n", searchString);
-    return searchString;
+char[10][10] string_split(char *inputString, char separator){
+
+    char splittedString[10][10];
+    char splittedPartString[10];
+    int splittedStringIndex = 0;
+    int splittedPartStringIndex = 0;
+    for (int inputStringIndex = 0; inputStringIndex < strlen(inputString); inputStringIndex++)
+    {
+        
+        splittedPartString[splittedPartStringIndex] = inputString[inputStringIndex];
+    
+        if (inputString[inputStringIndex] == separator)
+        {
+            splittedString[splittedStringIndex] = splittedPartString;
+            splittedStringIndex++;
+            for (int i = 0; i < 10; i++)
+            {
+                splittedPartString[i] = "\0";
+            }
+            splittedPartStringIndex = 0;
+        }
+        splittedPartStringIndex++;
+    }
+
+    return splittedString;
 }
 
 HttpRequest http_request_parse(char* rawHttpRequest){
@@ -54,13 +73,14 @@ HttpRequest http_request_parse(char* rawHttpRequest){
     char *string_message = strtok(our_request, sep);
     //printf("%s", string_message); 
     char *doubleString;
-    char *str;
-    doubleString = string_message;
+    //char *str;
+    http_request->method = string_message;
 
+    char separator = ' ';
     printf("%s\n", doubleString);
-    //char *str = string_split(http_request->method, " ");
+    char *str = string_split(http_request->method, separator);
 
-    while (doubleString == NULL)
+    while (str == NULL)
     {
         str = string_split(doubleString, " ");
         printf("%s", str);
