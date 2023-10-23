@@ -3,8 +3,8 @@
 
 int main()
 { 
-    char sep = ' ';
-    string_split("ghbdtn sfsf sfdfs \0", sep);
+    char sep = '_';
+    string_split("ghbdtn_sfsf_sfdfs\0", sep);
     //char **test = string_split("ghbdtn sfsf sfdfs", ' ');
     // for (int i = 0; i < 10; i++)
     // {

@@ -1,47 +1,37 @@
 #include <stdio.h>
+#include "LinkedList/LinkedList.h"
 
 void string_split(char *inputString, char separator){
-
-    char splittedString[10][10];
-    char splittedPartString[10];
+    char splittedString[100][100];
+    TLinkedListItem *splittedPartString = linked_list_create();
     
     int splittedStringIndex = 0;
     int splittedPartStringIndex = 0;
     for (int inputStringIndex = 0; inputString[inputStringIndex] != '\0'; inputStringIndex++)
     {
-        
-        splittedPartString[splittedPartStringIndex] = inputString[inputStringIndex];
-        splittedPartStringIndex++;
+        linked_list_add(splittedPartString, inputString[inputStringIndex]);
 
         if (inputString[inputStringIndex] == separator)
         {
-            for (int k = 0; k < 10; k++)
+            for (int k = 0; k < linked_list_count_elements(splittedPartString) - 1; k++) // Если 10 он записывает в одну строку два значения, почему???
             {
-                splittedString[splittedStringIndex][k] = splittedPartString[k];
-                //printf("%s\n", splittedPartString);
+                splittedString[splittedStringIndex][k] = linked_list_get_element_by_index(splittedPartString, k);
             } 
 
             splittedStringIndex++;
-
-            for (int i = 0; i < 10; i++)
-            {
-                splittedPartString[i] = ' ';
-            }
-            splittedPartStringIndex = 0;
+            splittedPartString = linked_list_remove_all(splittedPartString);
 
         }
-        //splittedPartStringIndex++;
+        
     }
-
+    for (int i = 0; i < linked_list_count_elements(splittedPartString); i++)
+    {
+        splittedString[splittedStringIndex][i] = linked_list_get_element_by_index(splittedPartString, i);
+    }
+    
     for (int i = 0; i < 10; i++)
     {
         printf("%s\n",splittedString[i]);
-
-        // for (int j = 0; j < 10; i++)
-        // {
-        //     printf("(%s) , (%s)",splittedString[i][j]);
-        // }
-        
     }
 
     //return splittedString;
