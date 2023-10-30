@@ -19,22 +19,6 @@ void printString(char *str){
     }
     
 }
-// char* concat(char *string1, char *string2){
-//     size_t len1 = strlen(string1);
-//     size_t len2 = strlen(string2);                      
-
-//     char *result = malloc(len1 + len2 + 1);
-
-//     if (!result) {
-//         fprintf(stderr, "malloc() failed: insufficient memory!\n");
-//         return NULL;
-//     }
-
-//     memcpy(result, string1, len1);
-//     memcpy(result + len1, string2, len2 + 1);    
-
-//     return result;
-// }
 
 HttpRequest* http_request_create(){
 
