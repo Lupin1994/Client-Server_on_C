@@ -85,7 +85,7 @@ HttpRequest http_request_parse(char* rawHttpRequest){
             printf("%s\n",http_request->version_protocol);
         }
     }
-
+    //----------------------------------------------------------------------
     char** request_lines_body_and_headers;
 
     request_lines_body_and_headers = string_split(request_lines[1],':');
@@ -95,14 +95,14 @@ HttpRequest http_request_parse(char* rawHttpRequest){
     {
         http_request->body[0] = request_lines_body_and_headers[j];
     }
-
-    request_lines_body_and_headers = string_split(request_lines[2],':');
-    http_request->headers[1] = request_lines_body_and_headers[0];
-    http_request->body[1] = request_lines_body_and_headers[1];
-
-    request_lines_body_and_headers = string_split(request_lines[3],':');
-    http_request->headers[2] = request_lines_body_and_headers[0];
-    http_request->body[2] = request_lines_body_and_headers[1];
+    //----------------------------------------------------------------------
+    for (int i = 1; i < 3; i++)
+    {
+        request_lines_body_and_headers = string_split(request_lines[i+1],':');
+        http_request->headers[i] = request_lines_body_and_headers[0];
+        http_request->body[i] = request_lines_body_and_headers[1];
+    }
+    //----------------------------------------------------------------------
 
     for (int i = 0; i < 3; i++)
     {
