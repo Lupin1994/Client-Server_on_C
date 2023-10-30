@@ -9,6 +9,7 @@
 #include <netinet/in.h>
 #include "http_request.h"
 #include "util.h"
+#include "HashTable_on_C/HashTable.h"
 
 void printString(char *str){
     int countElements = strlen(str);
@@ -18,6 +19,22 @@ void printString(char *str){
     }
     
 }
+// char* concat(char *string1, char *string2){
+//     size_t len1 = strlen(string1);
+//     size_t len2 = strlen(string2);                      
+
+//     char *result = malloc(len1 + len2 + 1);
+
+//     if (!result) {
+//         fprintf(stderr, "malloc() failed: insufficient memory!\n");
+//         return NULL;
+//     }
+
+//     memcpy(result, string1, len1);
+//     memcpy(result + len1, string2, len2 + 1);    
+
+//     return result;
+// }
 
 HttpRequest* http_request_create(){
 
@@ -46,7 +63,7 @@ HttpRequest* http_request_create(){
 HttpRequest http_request_parse(char* rawHttpRequest){
 
     HttpRequest *http_request = http_request_create();
- 
+
     //char *our_request = rawHttpRequest;
     // 1) Сплит по /n
     // 2) ОБработка превой строки (разделить по пробелам)
@@ -71,31 +88,42 @@ HttpRequest http_request_parse(char* rawHttpRequest){
 
     //----------------------------------------------------------------------;
 
+    THashTable *hashTableForHaeders = hashTable_create();
     char** request_lines_body_and_headers = string_split(request_lines[1],':');
-    http_request->headers[0] = request_lines_body_and_headers[0];
+    printf("0\n");
+    char *header_data = concat(request_lines_body_and_headers[1], request_lines_body_and_headers[2]);
+    printf("1\n");
+    hashTable_addItem(hashTableForHaeders, request_lines_body_and_headers[0], header_data);
+    printf("2\n");
+    //http_request->headers[0] = request_lines_body_and_headers[0];
+    //hashTable_print(hashTableForHaeders);
+
+    printf("3\n");
     
-    for (int j = 1; j < 3; j++)
-    {
-        http_request->body[0] = request_lines_body_and_headers[j];
-    }
-    //----------------------------------------------------------------------;
+    // for (int j = 1; j < 3; j++)
+    // {
+    //     http_request->body[0] = request_lines_body_and_headers[j];
+    // }
+    // //----------------------------------------------------------------------;
     for (int i = 1; i < 3; i++)
     {
         request_lines_body_and_headers = string_split(request_lines[i+1],':');
-        http_request->headers[i] = request_lines_body_and_headers[0];
-        http_request->body[i] = request_lines_body_and_headers[1];
+        hashTable_addItem(hashTableForHaeders,request_lines_body_and_headers[0], request_lines_body_and_headers[1]);
+        // http_request->headers[i] = request_lines_body_and_headers[0];
+        // http_request->body[i] = request_lines_body_and_headers[1];
     }
-    //----------------------------------------------------------------------;
+    hashTable_print(hashTableForHaeders);
+    // //----------------------------------------------------------------------;
 
-    for (int i = 0; i < 3; i++)
-    {
-        printf("%s\n",http_request->headers[i]);
-    }
-    printf("%s\n","----------------------------------------------");
-    for (int i = 0; i < 3; i++)
-    {
-        printf("%s\n",http_request->body[i]);
-    }
+    // for (int i = 0; i < 3; i++)
+    // {
+    //     printf("%s\n",http_request->headers[i]);
+    // }
+    // printf("%s\n","----------------------------------------------");
+    // for (int i = 0; i < 3; i++)
+    // {
+    //     printf("%s\n",http_request->body[i]);
+    // }
 
 }    
 

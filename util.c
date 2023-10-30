@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "LinkedList/LinkedList.h"
 
 char** string_split(char *inputString, char separator){
@@ -34,11 +35,22 @@ char** string_split(char *inputString, char separator){
     {
         splittedString[splittedStringIndex][i] = linked_list_get_element_by_index(splittedPartString, i);
     }
-    
-    // for (int i = 0; i < 10; i++)
-    // {
-    //     printf("%s\n",splittedString[i]);
-    // }
-
     return splittedString;
+}
+
+char* concat(char *string1, char *string2){
+    size_t len1 = strlen(string1);
+    size_t len2 = strlen(string2);                      
+
+    char *result = malloc(len1 + len2 + 1);
+
+    if (!result) {
+        fprintf(stderr, "malloc() failed: insufficient memory!\n");
+        return NULL;
+    }
+
+    memcpy(result, string1, len1);
+    memcpy(result + len1, string2, len2 + 1);    
+
+    return result;
 }
