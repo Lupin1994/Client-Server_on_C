@@ -53,40 +53,23 @@ HttpRequest http_request_parse(char* rawHttpRequest){
     // 3) Сплит по : 
 
     char** request_lines = string_split(rawHttpRequest, '\n');
-
-    // for (int i = 0; i < 4; i++)
-    // {
-    //     printf("%s\n",request_lines[i]);
-    // }
-    
     char** request_parts_first_string = string_split(request_lines[0],' '); 
     char** request_parts_protocol;
-    
-    for (int i = 0; i < 4; i++)
-    {
-        if (http_request->method == NULL)
-        {
-            http_request->method = request_parts_first_string[i];
-            printf("%s\n",http_request->method);
-        }
-        else if (http_request->path == NULL)
-        {
-            http_request->path = request_parts_first_string[i];
-            printf("%s\n",http_request->path);
-        }
-        else if(http_request->protocol == NULL)
-        {
-            request_parts_protocol = string_split(request_parts_first_string[i], '/');
-            http_request->protocol = request_parts_protocol[0];
-            printf("%s\n",http_request->protocol);
-        }
-        else
-        {
-            http_request->version_protocol = request_parts_protocol[1];
-            printf("%s\n",http_request->version_protocol);
-        }
-    }
-    //----------------------------------------------------------------------
+
+    http_request->method = request_parts_first_string[0];
+    printf("%s\n",http_request->method);
+
+    http_request->path = request_parts_first_string[1];
+    printf("%s\n",http_request->path);
+
+    request_parts_protocol = string_split(request_parts_first_string[2], '/');
+    http_request->protocol = request_parts_protocol[0];
+    printf("%s\n",http_request->protocol);
+
+    http_request->version_protocol = request_parts_protocol[1];
+    printf("%s\n",http_request->version_protocol);
+
+    //----------------------------------------------------------------------;
 
     char** request_lines_body_and_headers = string_split(request_lines[1],':');
     http_request->headers[0] = request_lines_body_and_headers[0];
@@ -95,14 +78,14 @@ HttpRequest http_request_parse(char* rawHttpRequest){
     {
         http_request->body[0] = request_lines_body_and_headers[j];
     }
-    //----------------------------------------------------------------------
+    //----------------------------------------------------------------------;
     for (int i = 1; i < 3; i++)
     {
         request_lines_body_and_headers = string_split(request_lines[i+1],':');
         http_request->headers[i] = request_lines_body_and_headers[0];
         http_request->body[i] = request_lines_body_and_headers[1];
     }
-    //----------------------------------------------------------------------
+    //----------------------------------------------------------------------;
 
     for (int i = 0; i < 3; i++)
     {
