@@ -61,6 +61,7 @@ HttpRequest http_request_parse(char* rawHttpRequest){
     
     char** request_parts_first_string = string_split(request_lines[0],' '); 
     char** request_parts_protocol;
+    
     for (int i = 0; i < 4; i++)
     {
         if (http_request->method == NULL)
@@ -86,9 +87,8 @@ HttpRequest http_request_parse(char* rawHttpRequest){
         }
     }
     //----------------------------------------------------------------------
-    char** request_lines_body_and_headers;
 
-    request_lines_body_and_headers = string_split(request_lines[1],':');
+    char** request_lines_body_and_headers = string_split(request_lines[1],':');
     http_request->headers[0] = request_lines_body_and_headers[0];
     
     for (int j = 1; j < 3; j++)
