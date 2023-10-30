@@ -88,6 +88,7 @@ TLinkedListItem* linked_list_with_filtering_elements(TLinkedListItem *head, bool
 }
 
 TLinkedListItem* linked_list_remove_by_index(TLinkedListItem* head, int index){
+
     if (head == NULL)
     {
         return NULL;
@@ -97,13 +98,18 @@ TLinkedListItem* linked_list_remove_by_index(TLinkedListItem* head, int index){
     {
         TLinkedListItem *second_item = head->next_item;
         free(head);
+        if (second_item == NULL)
+        {
+            return linked_list_create();
+        }
+
         return second_item;
     }
 
     TLinkedListItem *before_remove_item = head;
     
     int count = 0;
-    while (count <= index - 1)
+    while (count < index - 1)
     {
         if (before_remove_item->next_item == NULL)
         {
@@ -113,12 +119,11 @@ TLinkedListItem* linked_list_remove_by_index(TLinkedListItem* head, int index){
         before_remove_item = before_remove_item->next_item;
         count++;
     }
-    
 
     TLinkedListItem *remove_item = before_remove_item->next_item;
     before_remove_item->next_item = before_remove_item->next_item->next_item;
-    free(remove_item);
 
+    free(remove_item);
     return head;    
 } 
 
@@ -212,22 +217,12 @@ TLinkedListItem* linked_list_reverse (TLinkedListItem *head){
 
 TLinkedListItem* linked_list_remove_all(TLinkedListItem *head){
 
-    TLinkedListItem *current_item = linked_list_create();
     int count_elements = linked_list_count_elements(head);
-    //printf("%d\n", count_elements);
-    //printf("0\n");
-    int i = count_elements - 2;
-    //printf("%d\n", i);
-    for ( ; i >= 0 ; )
+    TLinkedListItem* new_head = head;
+    for (int i = 0; i < count_elements; i++)
     {
-        //printf("1");
-        head = linked_list_remove_by_index(head, i);
-        //linked_list_print(head);
-        //printf("2");
-        i--;
+        new_head = linked_list_remove_by_index(new_head, 0);
     }
-    free(head);
-    //printf("3");
 
-    return current_item;
+    return new_head;
 }

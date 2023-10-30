@@ -8,6 +8,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include "http_request.h"
+#include "util.h"
 
 void printString(char *str){
     int countElements = strlen(str);
@@ -26,99 +27,93 @@ HttpRequest* http_request_create(){
     request->path = NULL;
     request->protocol = NULL;
     request->version_protocol = NULL;
-    request->headers = NULL;
-    request->body = NULL;
+    request->headers = (char**)malloc(10 * sizeof(char*));
+    for (int i = 0; i < 10; i++)
+    {
+        request->headers[i] = (char*)malloc(10 * sizeof(char));
+    }
+
+    request->body = (char**)malloc(10 * sizeof(char*));
+    for (int i = 0; i < 10; i++)
+    {
+        request->body[i] = (char*)malloc(10 * sizeof(char));
+    }
 
     return request;
 }
 
-char[10][10] string_split(char *inputString, char separator){
-
-    char splittedString[10][10];
-    char splittedPartString[10];
-    int splittedStringIndex = 0;
-    int splittedPartStringIndex = 0;
-    for (int inputStringIndex = 0; inputStringIndex < strlen(inputString); inputStringIndex++)
-    {
-        
-        splittedPartString[splittedPartStringIndex] = inputString[inputStringIndex];
-    
-        if (inputString[inputStringIndex] == separator)
-        {
-            splittedString[splittedStringIndex] = splittedPartString;
-            splittedStringIndex++;
-            for (int i = 0; i < 10; i++)
-            {
-                splittedPartString[i] = "\0";
-            }
-            splittedPartStringIndex = 0;
-        }
-        splittedPartStringIndex++;
-    }
-
-    return splittedString;
-}
 
 HttpRequest http_request_parse(char* rawHttpRequest){
 
     HttpRequest *http_request = http_request_create();
-
-    char *our_request = rawHttpRequest;
+ 
+    //char *our_request = rawHttpRequest;
     // 1) Сплит по /n
     // 2) ОБработка превой строки (разделить по пробелам)
     // 3) Сплит по : 
 
-    //printf("%s", our_request);
-    char *sep = "\n";
-    char *string_message = strtok(our_request, sep);
-    //printf("%s", string_message); 
-    char *doubleString;
-    //char *str;
-    http_request->method = string_message;
+    char** request_lines = string_split(rawHttpRequest, '\n');
 
-    char separator = ' ';
-    printf("%s\n", doubleString);
-    char *str = string_split(http_request->method, separator);
-
-    while (str == NULL)
+    // for (int i = 0; i < 4; i++)
+    // {
+    //     printf("%s\n",request_lines[i]);
+    // }
+    
+    char** request_parts_first_string = string_split(request_lines[0],' '); 
+    char** request_parts_protocol;
+    for (int i = 0; i < 4; i++)
     {
-        str = string_split(doubleString, " ");
-        printf("%s", str);
-
         if (http_request->method == NULL)
         {
-            http_request->method = str;
+            http_request->method = request_parts_first_string[i];
+            printf("%s\n",http_request->method);
         }
         else if (http_request->path == NULL)
         {
-            http_request->path = str;
+            http_request->path = request_parts_first_string[i];
+            printf("%s\n",http_request->path);
         }
-        else if (http_request->protocol == NULL)
+        else if(http_request->protocol == NULL)
         {
-            http_request->protocol = str;
+            request_parts_protocol = string_split(request_parts_first_string[i], '/');
+            http_request->protocol = request_parts_protocol[0];
+            printf("%s\n",http_request->protocol);
         }
         else
         {
-            http_request->version_protocol = str;
+            http_request->version_protocol = request_parts_protocol[1];
+            printf("%s\n",http_request->version_protocol);
         }
-
     }
-    printf("%s", http_request->method);
-    printf("%s", http_request->path);
-    printf("%s", http_request->protocol);
-    printf("%s", http_request->version_protocol);
-    
-    //http_request->method = string_split(http_request->method, " ");
 
-    //printf("%s\n", http_request->method);
-    // while (string_message != NULL)
-    // {
-    //     // printf("%s\n", string_message);
-    //     string_message = strtok(our_request,sep);
-    //     str = string_message;
-    //     printf("%s", string_message);
-    // }
-    //printf("%s", http_request->method);
+    char** request_lines_body_and_headers;
+
+    request_lines_body_and_headers = string_split(request_lines[1],':');
+    http_request->headers[0] = request_lines_body_and_headers[0];
+    
+    for (int j = 1; j < 3; j++)
+    {
+        http_request->body[0] = request_lines_body_and_headers[j];
+    }
+
+    request_lines_body_and_headers = string_split(request_lines[2],':');
+    http_request->headers[1] = request_lines_body_and_headers[0];
+    http_request->body[1] = request_lines_body_and_headers[1];
+
+    request_lines_body_and_headers = string_split(request_lines[3],':');
+    http_request->headers[2] = request_lines_body_and_headers[0];
+    http_request->body[2] = request_lines_body_and_headers[1];
+
+    for (int i = 0; i < 3; i++)
+    {
+        printf("%s\n",http_request->headers[i]);
+    }
+    printf("%s\n","----------------------------------------------");
+    for (int i = 0; i < 3; i++)
+    {
+        printf("%s\n",http_request->body[i]);
+    }
+
 }    
 
 int main()

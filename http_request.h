@@ -7,7 +7,7 @@ struct HTTP_request
     char* path;
     char* protocol;
     char* version_protocol;
-    char* headers;
-    char* body;
+    char** headers;
+    char** body;
 };
 

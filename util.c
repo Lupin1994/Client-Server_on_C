@@ -1,8 +1,14 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "LinkedList/LinkedList.h"
 
-void string_split(char *inputString, char separator){
-    char splittedString[100][100];
+char** string_split(char *inputString, char separator){
+    char **splittedString = (char**)malloc(100 * sizeof(char*));
+    for (int i = 0; i < 100; i++)
+    {
+        splittedString[i] = (char*)malloc(100 * sizeof(char));
+    }
+    
     TLinkedListItem *splittedPartString = linked_list_create();
     
     int splittedStringIndex = 0;
@@ -29,10 +35,10 @@ void string_split(char *inputString, char separator){
         splittedString[splittedStringIndex][i] = linked_list_get_element_by_index(splittedPartString, i);
     }
     
-    for (int i = 0; i < 10; i++)
-    {
-        printf("%s\n",splittedString[i]);
-    }
+    // for (int i = 0; i < 10; i++)
+    // {
+    //     printf("%s\n",splittedString[i]);
+    // }
 
-    //return splittedString;
+    return splittedString;
 }
