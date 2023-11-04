@@ -11,6 +11,7 @@
 #include "util.h"
 #include "HashTable_on_C/HashTable.h"
 
+
 void printString(char *str){
     int countElements = strlen(str);
     for (int i = 0; i <= countElements; i++)
@@ -48,13 +49,16 @@ HttpRequest http_request_parse(char* rawHttpRequest){
 
     HttpRequest *http_request = http_request_create();
 
-    //char *our_request = rawHttpRequest;
-    // 1) Сплит по /n
-    // 2) ОБработка превой строки (разделить по пробелам)
-    // 3) Сплит по : 
-
-    char** request_lines = string_split(rawHttpRequest, '\n');
-    char** request_parts_first_string = string_split(request_lines[0],' '); 
+    int request_lines_count;
+    char** request_lines = string_split(rawHttpRequest, '\n', &request_lines_count);
+    // for (int i = 0; i < 4; i++)
+    // {
+    //     printf("this is all req :%s\n", request_lines[i]);
+    // }
+    
+    //printf("in server - 1 %d\n", request_lines_count);
+    char** request_parts_first_string = string_split(request_lines[0],' ', NULL);
+    //printf("in server - 2 %d\n", request_lines_count); 
     char** request_parts_protocol;
 
     http_request->method = request_parts_first_string[0];
@@ -63,7 +67,8 @@ HttpRequest http_request_parse(char* rawHttpRequest){
     http_request->path = request_parts_first_string[1];
     printf("%s\n",http_request->path);
 
-    request_parts_protocol = string_split(request_parts_first_string[2], '/');
+    request_parts_protocol = string_split(request_parts_first_string[2], '/', NULL);
+    //printf("in server - 3 %d\n", request_lines_count);
     http_request->protocol = request_parts_protocol[0];
     printf("%s\n",http_request->protocol);
 
@@ -73,41 +78,26 @@ HttpRequest http_request_parse(char* rawHttpRequest){
     //----------------------------------------------------------------------;
 
     THashTable *hashTableForHaeders = hashTable_create();
-    char** request_lines_body_and_headers = string_split(request_lines[1],':');
-    printf("0\n");
-    char *header_data = concat(request_lines_body_and_headers[1], request_lines_body_and_headers[2]);
-    printf("1\n");
-    hashTable_addItem(hashTableForHaeders, request_lines_body_and_headers[0], header_data);
-    printf("2\n");
-    //http_request->headers[0] = request_lines_body_and_headers[0];
-    //hashTable_print(hashTableForHaeders);
 
-    printf("3\n");
-    
-    // for (int j = 1; j < 3; j++)
-    // {
-    //     http_request->body[0] = request_lines_body_and_headers[j];
-    // }
-    // //----------------------------------------------------------------------;
-    for (int i = 1; i < 3; i++)
+    //printf("in server - 4 %d\n", request_lines_count);
+
+    for (int i = 1; i < request_lines_count; i++)
     {
-        request_lines_body_and_headers = string_split(request_lines[i+1],':');
-        hashTable_addItem(hashTableForHaeders,request_lines_body_and_headers[0], request_lines_body_and_headers[1]);
-        // http_request->headers[i] = request_lines_body_and_headers[0];
-        // http_request->body[i] = request_lines_body_and_headers[1];
+        int splittedHeaderCount;
+        char** splitted_header = string_split(request_lines[i], ':', &splittedHeaderCount);
+
+        char *header_data = "";
+        //printf("%d", splittedHeaderCount);
+        for (int j = 1; j <= splittedHeaderCount; j++)
+        {
+            header_data = string_concat(header_data, splitted_header[j]);
+            //printf("%s", header_data);
+        }
+
+        hashTable_addItem(hashTableForHaeders, splitted_header[0], header_data);
+
     }
     hashTable_print(hashTableForHaeders);
-    // //----------------------------------------------------------------------;
-
-    // for (int i = 0; i < 3; i++)
-    // {
-    //     printf("%s\n",http_request->headers[i]);
-    // }
-    // printf("%s\n","----------------------------------------------");
-    // for (int i = 0; i < 3; i++)
-    // {
-    //     printf("%s\n",http_request->body[i]);
-    // }
 
 }    
 

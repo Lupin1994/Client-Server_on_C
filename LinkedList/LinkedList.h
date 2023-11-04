@@ -15,7 +15,7 @@ char Map_transform_element(char element);
 
 void linked_list_print(TLinkedListItem *head);
 TLinkedListItem* linked_list_create();
-char linked_list_get_element_by_index(TLinkedListItem * head, int index);
+char linked_list_get_element_by_index(TLinkedListItem *head, int index);
 void linked_list_add(TLinkedListItem * head, char value);
 TLinkedListItem* linked_list_remove_by_index(TLinkedListItem* head, int index);
 TLinkedListItem* linked_list_with_filtering_elements(TLinkedListItem *head, bool (*predicate)(char));

@@ -9,11 +9,13 @@
 
 void hashTable_print(THashTable *hashTable){
     printf("\n ------Hash Table------\n");
-    printf("%d\n",hashTable->count);
-    //printf("%s\n",hashTable->items[0]->value);
-    for (int i = 0; i < hashTable->count; i++)
+
+    for (int i = 0; i < HASHTABLE_SIZE; i++)
     {
-        printf("{Key:%s : Value:%s}\n", hashTable->items[i]->key, hashTable->items[i]->value);
+        if (hashTable->items[i] != NULL)
+        {
+            printf("{Key = %s : Value = %s}\n", hashTable->items[i]->key, hashTable->items[i]->value);
+        }
     }
     
     printf("\n -------THE END--------\n");
@@ -23,8 +25,6 @@ void hashTable_print(THashTable *hashTable){
 THashTableItem* hashTable_createItem(char *key, char *value){
 
     THashTableItem *item = (THashTableItem*)malloc(sizeof(THashTableItem));
-    item->key = malloc(30 * sizeof(char));
-    item->value = malloc(30 * sizeof(char));
 
     item->key = key;
     item->value = value;
@@ -35,37 +35,48 @@ THashTableItem* hashTable_createItem(char *key, char *value){
 THashTable* hashTable_create(){
 
     THashTable *hashTable = (THashTable*)malloc(sizeof(THashTable));
-    //hashTable->size = 1000;
+    
     hashTable->count = 0;
     hashTable->items = (THashTableItem**)calloc(HASHTABLE_SIZE, sizeof(THashTableItem*));
 
     for (int i = 0; i < HASHTABLE_SIZE; i++)
+    {
         hashTable->items[i] = NULL;
+    }
 
     return hashTable;
 }
 
 unsigned long hashFunction(char *key){
+
     unsigned long key_int = 0;
     size_t key_length = strlen(key);
+
     for (int i = 0; i < key_length ; i++)
     {
         key_int += key[i];
     }
+
     return key_int % HASHTABLE_SIZE; 
 }
 
 void item_free(THashTableItem *item){
+
     free (item->key);
     free (item);
 }
 
 void hashTable_free(THashTable *hashTable){
+
     for (int i=0; i < HASHTABLE_SIZE; i++) {
         THashTableItem *item = hashTable->items[i];
-        if (item != NULL)
+
+        if (item != NULL){
             item_free(item);
+        }
+
     }
+
     free (hashTable->items);
     free (hashTable);
 }
@@ -87,6 +98,7 @@ void hashTable_collisionsProcessing(THashTable *hashtable, unsigned long key_ind
 
 
 void hashTable_addItem(THashTable *hashTable, char *key, char *value){
+
     if (hashTable->count == HASHTABLE_SIZE)
     {
         printf("Hash table is full\n");
@@ -103,10 +115,13 @@ void hashTable_addItem(THashTable *hashTable, char *key, char *value){
     {
         hashTable->items[key_index] = item;
         hashTable->count++;
+        //printf("{Key:%s : Value:%s}\n", hashTable->items[key_index]->key, hashTable->items[key_index]->value);
+        //printf("%ld\n", key_index);
         return;
     }
 
     hashTable_collisionsProcessing(hashTable, key_index, item);
+
 }
 
 char* hashTable_searchValue(THashTable *hashTable, char *key){
@@ -122,18 +137,19 @@ char* hashTable_searchValue(THashTable *hashTable, char *key){
 }
 
 void hashTable_printSearchValue(THashTable *hashTable, char *key){
-    char *value = hashTable_searchValue(hashTable,key);
+    char *value = hashTable_searchValue(hashTable, key);
     if (value == NULL)
     {
         printf("Key:%s not found\n", key);
         return;
     }
 
-    printf("{Key:%s, Value:%d\n}", key, *value);
+    printf("{Key:%s, Value:%s\n}", key, value);
 }
 
 void hashTable_removeElement_byKey(THashTable *hashTable, char *key){
     int index = hashFunction(key);
+
     if (hashTable->items[index] == NULL)
     {
         printf("\n Данного ключа не существует \n");

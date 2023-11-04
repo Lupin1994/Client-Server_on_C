@@ -3,7 +3,8 @@
 #include <string.h>
 #include "LinkedList/LinkedList.h"
 
-char** string_split(char *inputString, char separator){
+char** string_split(char *inputString, char separator, int *splittedCount){
+    
     char **splittedString = (char**)malloc(100 * sizeof(char*));
     for (int i = 0; i < 100; i++)
     {
@@ -20,25 +21,40 @@ char** string_split(char *inputString, char separator){
 
         if (inputString[inputStringIndex] == separator)
         {
-            for (int k = 0; k < linked_list_count_elements(splittedPartString) - 1; k++) // Если 10 он записывает в одну строку два значения, почему???
+            int splittedPartStringCount = linked_list_count_elements(splittedPartString);
+            for (int k = 0; k < splittedPartStringCount - 1; k++) // Если 10 он записывает в одну строку два значения, почему???
             {
                 splittedString[splittedStringIndex][k] = linked_list_get_element_by_index(splittedPartString, k);
+                //printf("in split char : %c\n", linked_list_get_element_by_index(splittedPartString, k));
             } 
 
             splittedStringIndex++;
             splittedPartString = linked_list_remove_all(splittedPartString);
+            //linked_list_print(splittedPartString);
 
         }
         
     }
-    for (int i = 0; i < linked_list_count_elements(splittedPartString); i++)
+    
+    int splittedStringCount = linked_list_count_elements(splittedPartString);
+    //printf("in split : %d\n", splittedStringCount);
+    for (int i = 0; i < splittedStringCount; i++)
     {
         splittedString[splittedStringIndex][i] = linked_list_get_element_by_index(splittedPartString, i);
+        //printf("index : %d", splittedStringIndex);
     }
+
+    if (splittedCount != NULL)
+    {
+        *splittedCount = splittedStringIndex + 1; // Беру просто индекс
+        printf("in split after: %d\n", *splittedCount);
+    }
+
     return splittedString;
 }
 
-char* concat(char *string1, char *string2){
+char* string_concat(char *string1, char *string2){
+    
     size_t len1 = strlen(string1);
     size_t len2 = strlen(string2);                      
 
