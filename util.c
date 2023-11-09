@@ -17,23 +17,29 @@ char** string_split(char *inputString, char separator, int *splittedCount){
     int splittedPartStringIndex = 0;
     for (int inputStringIndex = 0; inputString[inputStringIndex] != '\0'; inputStringIndex++)
     {
-        linked_list_add(splittedPartString, inputString[inputStringIndex]);
-
-        if (inputString[inputStringIndex] == separator)
+        if (inputString[inputStringIndex] != separator)
         {
-            int splittedPartStringCount = linked_list_count_elements(splittedPartString);
-            for (int k = 0; k < splittedPartStringCount - 1; k++) // Если 10 он записывает в одну строку два значения, почему???
-            {
-                splittedString[splittedStringIndex][k] = linked_list_get_element_by_index(splittedPartString, k);
-                //printf("in split char : %c\n", linked_list_get_element_by_index(splittedPartString, k));
-            } 
-
-            splittedStringIndex++;
-            splittedPartString = linked_list_remove_all(splittedPartString);
-            //linked_list_print(splittedPartString);
-
+            linked_list_add(splittedPartString, inputString[inputStringIndex]);
+            continue;
         }
-        
+
+        int splittedPartStringCount = linked_list_count_elements(splittedPartString);
+        //printf("splitted part string count = %d\n", splittedPartStringCount);
+        //printf("in split char : ");
+        for (int k = 0; k < splittedPartStringCount; k++) // Если 10 он записывает в одну строку два значения, почему???
+        {
+            char c = linked_list_get_element_by_index(splittedPartString, k);
+            splittedString[splittedStringIndex][k] = c;
+
+            //printf("'%d|%c' , ", c,c);
+        } 
+        //printf("\n");
+        splittedStringIndex++;
+        splittedPartString = linked_list_remove_all(splittedPartString);
+        //linked_list_print(splittedPartString);
+
+
+    
     }
     
     int splittedStringCount = linked_list_count_elements(splittedPartString);
@@ -47,7 +53,7 @@ char** string_split(char *inputString, char separator, int *splittedCount){
     if (splittedCount != NULL)
     {
         *splittedCount = splittedStringIndex + 1; // Беру просто индекс
-        printf("in split after: %d\n", *splittedCount);
+        //printf("in split after: %d\n", *splittedCount);
     }
 
     return splittedString;

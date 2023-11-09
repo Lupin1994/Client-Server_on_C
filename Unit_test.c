@@ -3,18 +3,20 @@
 
 int main()
 { 
-    char sep = '_';
-    string_split("ghbdtn_sfsf_sfdfs\0", sep);
-    //char **test = string_split("ghbdtn sfsf sfdfs", ' ');
-    // for (int i = 0; i < 10; i++)
-    // {
-    //     printf("%s",test[i]);
-
-    //     for (int j = 0; j < 10; j++)
-    //     {
-    //         printf("%s",test[j]);
-    //     }
-    // }
+    // char sep = '_';
+    // string_split("ghbdtn_sfsf_sfdfs", sep);
+    int count;
+    char **test = string_split("ghbdtn_sfsf_sfdfs", '_', &count);
+    for (int i = 0; i < count; i++)
+    {
+        
+        printf("%d = '%s'\n", i, test[i]);
+        for (int k = 0; k < 10; k++)
+        {
+            printf("%d = '%d', ", k, test[i][k]);
+        }
+        
+    }
     
     return 0;
 }

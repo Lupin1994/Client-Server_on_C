@@ -14,7 +14,12 @@ void hashTable_print(THashTable *hashTable){
     {
         if (hashTable->items[i] != NULL)
         {
-            printf("{Key = %s : Value = %s}\n", hashTable->items[i]->key, hashTable->items[i]->value);
+            char *key = hashTable->items[i]->key;
+
+            if (key != NULL && strlen(key) > 0 && key[0] != '\0')
+            {
+                printf("{Key = %s : Value = %s}\n", hashTable->items[i]->key, hashTable->items[i]->value);
+            }
         }
     }
     

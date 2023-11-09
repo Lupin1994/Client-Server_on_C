@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <json-c/json.h>
+#include <cjson/cJSON.h>
+
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -20,6 +23,20 @@ void printString(char *str){
     }
     
 }
+
+// {
+//     "first_name": "John",
+//     "last_name": "Black",
+//     "age": 35,
+//     "children": [
+//         { "first_name": "Alice", "age": 5 },
+//         { "first_name": "Robert", "age": 8 },
+//     ],
+
+//     "wife": null,
+
+//     "simple" : [ 12, 15, 76, 34, 75, "Test", 23.1, 65.3, false, true, false ]
+// }
 
 HttpRequest* http_request_create(){
 
@@ -51,14 +68,9 @@ HttpRequest http_request_parse(char* rawHttpRequest){
 
     int request_lines_count;
     char** request_lines = string_split(rawHttpRequest, '\n', &request_lines_count);
-    // for (int i = 0; i < 4; i++)
-    // {
-    //     printf("this is all req :%s\n", request_lines[i]);
-    // }
-    
-    //printf("in server - 1 %d\n", request_lines_count);
+
     char** request_parts_first_string = string_split(request_lines[0],' ', NULL);
-    //printf("in server - 2 %d\n", request_lines_count); 
+
     char** request_parts_protocol;
 
     http_request->method = request_parts_first_string[0];
@@ -68,7 +80,7 @@ HttpRequest http_request_parse(char* rawHttpRequest){
     printf("%s\n",http_request->path);
 
     request_parts_protocol = string_split(request_parts_first_string[2], '/', NULL);
-    //printf("in server - 3 %d\n", request_lines_count);
+
     http_request->protocol = request_parts_protocol[0];
     printf("%s\n",http_request->protocol);
 
@@ -103,8 +115,11 @@ HttpRequest http_request_parse(char* rawHttpRequest){
 
 int main()
 {
-    char server_message[256] = "You have reached the server!";
+    
 
+    setvbuf(stdout, NULL, _IONBF, 0);
+    //char server_message[256] = "You have reached the server!";
+    char server_message[256] = "HTTP/0.9 200 OK";
     // create the server socket
     int server_socket;
     server_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -147,9 +162,8 @@ int main()
 
     http_request_parse(request);
 
-    //split_on_C(request);
-
     // send the message
+
     send(client_socket, server_message, sizeof(server_message), 0);    
     
     // close the socket
