@@ -1,16 +1,19 @@
+#ifndef H_HASHTABLE
+#define H_HASHTABLE
+
 typedef struct HashTableItem THashTableItem;
 struct HashTableItem
 {
     char *key;
     char *value;
-    //int count;
+
 };
 
 typedef struct HashTable THashTable;
 struct HashTable
 {
     THashTableItem **items;
-    //int size;
+
     int count;
 };
 
@@ -28,3 +31,5 @@ void hashTable_free(THashTable *hashTable);
 void hashTable_addItem(THashTable *hashTable, char *key, char *value);
 void hashTable_printSearchValue(THashTable *hashTable, char *key);
 void hashTable_removeElement_byKey(THashTable *hashTable, char *key);
+
+#endif

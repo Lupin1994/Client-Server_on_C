@@ -3,9 +3,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-#include <json-c/json.h>
-#include <cjson/cJSON.h>
-
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -13,6 +10,7 @@
 #include "http_request.h"
 #include "util.h"
 #include "HashTable_on_C/HashTable.h"
+#include "http_response.h"
 
 
 void printString(char *str){
@@ -23,20 +21,6 @@ void printString(char *str){
     }
     
 }
-
-// {
-//     "first_name": "John",
-//     "last_name": "Black",
-//     "age": 35,
-//     "children": [
-//         { "first_name": "Alice", "age": 5 },
-//         { "first_name": "Robert", "age": 8 },
-//     ],
-
-//     "wife": null,
-
-//     "simple" : [ 12, 15, 76, 34, 75, "Test", 23.1, 65.3, false, true, false ]
-// }
 
 HttpRequest* http_request_create(){
 
@@ -91,19 +75,16 @@ HttpRequest http_request_parse(char* rawHttpRequest){
 
     THashTable *hashTableForHaeders = hashTable_create();
 
-    //printf("in server - 4 %d\n", request_lines_count);
-
     for (int i = 1; i < request_lines_count; i++)
     {
         int splittedHeaderCount;
         char** splitted_header = string_split(request_lines[i], ':', &splittedHeaderCount);
 
         char *header_data = "";
-        //printf("%d", splittedHeaderCount);
+
         for (int j = 1; j <= splittedHeaderCount; j++)
         {
             header_data = string_concat(header_data, splitted_header[j]);
-            //printf("%s", header_data);
         }
 
         hashTable_addItem(hashTableForHaeders, splitted_header[0], header_data);
@@ -111,7 +92,28 @@ HttpRequest http_request_parse(char* rawHttpRequest){
     }
     hashTable_print(hashTableForHaeders);
 
-}    
+}  
+
+HttpResponse* http_response_create(){
+
+    HttpResponse *response = (HttpResponse*)malloc(sizeof(HttpResponse));
+
+    response->request_line = "HTTP/1.1 200 OK";
+    response->header_fields = hashTable_create();
+    response->body_Json = hashTable_create();
+
+    hashTable_addItem(response->header_fields, "Content-Type" , "application/json");
+    hashTable_addItem(response->header_fields, "Connection" , "keep-alive");
+    hashTable_addItem(response->header_fields, "Content-Language" , "en-US");
+    hashTable_addItem(response->header_fields, "Server" , "localhost");
+
+    hashTable_print(response->header_fields);
+
+    hashTable_addItem(response->body_Json, "{ body" , "/home/alex/Документы/Socket_2/server_reply.json }");
+    hashTable_print(response->body_Json);
+
+    return response;
+}
 
 int main()
 {
@@ -119,7 +121,7 @@ int main()
 
     setvbuf(stdout, NULL, _IONBF, 0);
     //char server_message[256] = "You have reached the server!";
-    char server_message[256] = "HTTP/0.9 200 OK";
+    char *server_message;
     // create the server socket
     int server_socket;
     server_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -159,8 +161,10 @@ int main()
     {
         printf("The client sent the data:%s\n", request);
     }
-
+    
     http_request_parse(request);
+    server_message = (char*)http_response_create();
+
 
     // send the message
 
